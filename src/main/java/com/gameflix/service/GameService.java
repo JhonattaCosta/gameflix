@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,10 @@ public class GameService {
 
     public List<Game> findAllGames(){
         return repostiory.findAll();
+    }
+
+    public Optional<Game> findGameById(Long id){
+        return repostiory.findById(id);
     }
 
 }
