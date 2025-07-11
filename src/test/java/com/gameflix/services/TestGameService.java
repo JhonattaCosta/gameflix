@@ -27,6 +27,21 @@ public class TestGameService {
     private GameService service;
 
     @Test
+    public void testSaveGame(){
+        Game gamefake = new Game(1L,
+                "GTA 6",
+                "Jogo de mundo aberto",
+                LocalDate.of(2026,05,26));
+
+        when(repository.save(gamefake)).thenReturn(gamefake);
+
+        Game savedGame = service.saveGame(gamefake);
+
+        assertEquals(gamefake, savedGame);
+    }
+
+
+    @Test
     public void testFindAllGames(){
         List<Game> games = Arrays.asList(
             new Game(1L,
