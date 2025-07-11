@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class TestGameService {
@@ -40,7 +41,6 @@ public class TestGameService {
         assertEquals(gamefake, savedGame);
     }
 
-
     @Test
     public void testFindAllGames(){
         List<Game> games = Arrays.asList(
@@ -58,5 +58,20 @@ public class TestGameService {
         List<Game> gamesfake = service.findAllGames();
 
         assertEquals(2,gamesfake.size());
+    }
+
+    @Test
+    public void testFindGameById(){
+        Optional<Game> gamefake = Optional.of(new Game(1L,
+                "GTA 6",
+                "Jogo de mundo aberto",
+                LocalDate.of(2026,05,26)));
+
+        when(repository.findById(1L)).thenReturn(gamefake);
+
+        Optional<Game> findIdGame = service.findGameById(1L);
+
+        assertTrue(findIdGame.isPresent());
+        assertEquals(findIdGame, gamefake);
     }
 }
