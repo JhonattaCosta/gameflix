@@ -27,7 +27,7 @@ public class TestGameService {
     private GameService service;
 
     @Test
-    public void findAllGames(){
+    public void testFindAllGames(){
         List<Game> games = Arrays.asList(
             new Game(1L,
                     "GTA 6",
