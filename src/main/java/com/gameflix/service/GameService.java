@@ -1,6 +1,7 @@
 package com.gameflix.service;
 
-import com.gameflix.entity.Game;
+import com.gameflix.model.Category;
+import com.gameflix.model.Game;
 import com.gameflix.repository.GameRepostiory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,10 @@ public class GameService {
 
     public Optional<Game> findGameById(Long id){
         return repostiory.findById(id);
+    }
+
+    public List<Game> findByCategory(Long categoryId){
+        return repostiory.findGamebyCategories(List.of(Category.builder().id(categoryId).build()));
     }
 
 }
