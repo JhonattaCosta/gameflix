@@ -1,6 +1,7 @@
 package com.gameflix.services;
 
-import com.gameflix.entity.Game;
+import com.gameflix.model.Category;
+import com.gameflix.model.Game;
 import com.gameflix.repository.GameRepostiory;
 import com.gameflix.service.GameService;
 import org.junit.jupiter.api.Test;
@@ -27,12 +28,21 @@ public class TestGameService {
     @InjectMocks
     private GameService service;
 
+    List<Category> categories = Arrays.asList(
+            new Category(1L, "Ação"),
+            new Category(2L, "Terceira-Pessoa")
+    );
+
     @Test
     public void testSaveGame(){
-        Game gamefake = new Game(1L,
+        Game gamefake = new Game(
+                1L,
                 "GTA 6",
                 "Jogo de mundo aberto",
-                LocalDate.of(2026,05,26));
+                4,
+                LocalDate.of(2026, 06, 26),
+                categories
+        );
 
         when(repository.save(gamefake)).thenReturn(gamefake);
 
@@ -44,15 +54,22 @@ public class TestGameService {
     @Test
     public void testFindAllGames(){
         List<Game> games = Arrays.asList(
-            new Game(1L,
-                    "GTA 6",
-                    "Jogo de mundo aberto",
-                    LocalDate.of(2026,05,26)),
-            new Game(1L,
-                    "PUBG 2",
-                    "Battle Royale",
-                    LocalDate.of(2026,02,15))
-        );
+                new Game(
+                        1L,
+                        "GTA 6",
+                        "Jogo de mundo aberto",
+                        4,
+                        LocalDate.of(2026, 06, 26),
+                        categories
+                ),
+                new Game(
+                        1L,
+                        "PUBG",
+                        "BattleGround",
+                        4,
+                        LocalDate.of(2026, 06, 26),
+                        categories
+                ));
         when(repository.findAll()).thenReturn(games);
 
         List<Game> gamesfake = service.findAllGames();
@@ -62,10 +79,14 @@ public class TestGameService {
 
     @Test
     public void testFindGameById(){
-        Optional<Game> gamefake = Optional.of(new Game(1L,
+        Optional<Game> gamefake = Optional.of(new Game(
+                1L,
                 "GTA 6",
                 "Jogo de mundo aberto",
-                LocalDate.of(2026,05,26)));
+                4,
+                LocalDate.of(2026, 06, 26),
+                categories
+        ));
 
         when(repository.findById(1L)).thenReturn(gamefake);
 
@@ -74,4 +95,6 @@ public class TestGameService {
         assertTrue(findIdGame.isPresent());
         assertEquals(findIdGame, gamefake);
     }
+
+
 }
