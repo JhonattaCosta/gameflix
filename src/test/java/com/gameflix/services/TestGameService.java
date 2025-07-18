@@ -127,7 +127,7 @@ public class TestGameService {
                         LocalDate.of(2026, 06, 26),
                         categories
                 ));
-        when(repository.findGamebyCategories(anyList())).thenReturn(games);
+        when(repository.findByCategoriesIn(anyList())).thenReturn(games);
 
         List<Game> gamesFind = service.findByCategory(1L);
 
