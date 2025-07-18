@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface GameRepostiory extends JpaRepository<Game, Long> {
 
-    List<Game> findGamebyCategories(List<Category> categories);
+    List<Game> findByCategoriesIn(List<Category> categories);
 
 }
