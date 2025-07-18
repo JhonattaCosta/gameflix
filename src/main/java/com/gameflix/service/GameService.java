@@ -17,19 +17,19 @@ public class GameService {
     private final GameRepostiory repostiory;
     private final CategoryService categoryService;
 
-    public Game saveGame(Game game){
+    public Game saveGame(Game game) {
         return repostiory.save(game);
     }
 
-    public List<Game> findAllGames(){
+    public List<Game> findAllGames() {
         return repostiory.findAll();
     }
 
-    public Optional<Game> findGameById(Long id){
+    public Optional<Game> findGameById(Long id) {
         return repostiory.findById(id);
     }
 
-    public List<Category> findCategories(List<Category> categories){
+    public List<Category> findCategories(List<Category> categories) {
         List<Category> categoriesFound = new ArrayList<>();
         categories.forEach(category ->
                 categoryService.findCategoryById(category.getId()).ifPresent(categoriesFound::add)
@@ -37,9 +37,9 @@ public class GameService {
         return categoriesFound;
     }
 
-    public Optional<Game> updateGame(Long gameId, Game updateGame){
+    public Optional<Game> updateGame(Long gameId, Game updateGame) {
         Optional<Game> optGame = repostiory.findById(gameId);
-        if (optGame.isPresent()){
+        if (optGame.isPresent()) {
             List<Category> categories = this.findCategories(updateGame.getCategories());
 
             Game game = optGame.get();
@@ -57,11 +57,11 @@ public class GameService {
         return Optional.empty();
     }
 
-    public List<Game> findByCategory(Long categoryId){
-        return repostiory.findGamebyCategories(List.of(Category.builder().id(categoryId).build()));
+    public List<Game> findByCategory(Long categoryId) {
+        return repostiory.findByCategoriesIn(List.of(Category.builder().id(categoryId).build()));
     }
 
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         repostiory.deleteById(id);
     }
 }
