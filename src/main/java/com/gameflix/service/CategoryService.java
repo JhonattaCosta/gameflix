@@ -1,5 +1,7 @@
 package com.gameflix.service;
 
+import com.gameflix.dto.CategoryDTO;
+import com.gameflix.mapper.CategoryMapper;
 import com.gameflix.model.Category;
 import com.gameflix.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +15,12 @@ import java.util.Optional;
 public class CategoryService {
 
     private final CategoryRepository repository;
+    private final CategoryMapper categoryMapper;
 
-    public Category saveCategory(Category category){
-        return repository.save(category);
+    public CategoryDTO saveCategory(CategoryDTO categoryDTO){
+        Category category = categoryMapper.map(categoryDTO);
+        category = repository.save(category);
+        return categoryMapper.map(category);
     }
 
     public List<Category> findAllCategory(){
