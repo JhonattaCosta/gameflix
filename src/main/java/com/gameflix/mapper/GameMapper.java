@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Component
 public class GameMapper {
 
-    public static GameDTO toGameDTO(Game game) {
+    public GameDTO map(Game game) {
         GameDTO gameDTO = new GameDTO();
 
         gameDTO.setId(game.getId());
@@ -21,14 +21,14 @@ public class GameMapper {
         gameDTO.setDateRelease(game.getDateRelease());
         gameDTO.setCategories(
                 game.getCategories().stream()
-                        .map(CategoryMapper::toCategoryDto)
+                        .map(CategoryMapper::map)
                         .collect(Collectors.toList())
         );
         return gameDTO;
 
     }
 
-    public  static Game toGame(GameDTO gameDTO){
+    public Game map(GameDTO gameDTO){
         Game game = new Game();
 
         game.setId(gameDTO.getId());
@@ -38,7 +38,7 @@ public class GameMapper {
         game.setDateRelease(gameDTO.getDateRelease());
         game.setCategories(
                 gameDTO.getCategories().stream()
-                        .map(CategoryMapper::toCategory)
+                        .map(CategoryMapper::map)
                         .collect(Collectors.toList())
         );
 

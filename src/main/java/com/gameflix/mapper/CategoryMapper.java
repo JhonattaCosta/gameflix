@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CategoryMapper {
 
-    public  static CategoryDTO toCategoryDto(Category category){
+    public  static CategoryDTO map(Category category){
         CategoryDTO categoryDTO = new CategoryDTO();
 
         categoryDTO.setId(category.getId());
@@ -17,7 +17,7 @@ public class CategoryMapper {
 
     }
 
-    public static Category toCategory(CategoryDTO categoryDTO){
+    public static Category map(CategoryDTO categoryDTO){
         Category category = new Category();
 
         category.setId(categoryDTO.getId());
