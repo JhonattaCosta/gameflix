@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Component
 public class GameMapper {
 
-    public GameDTO map(Game game) {
+    public static GameDTO map(Game game) {
         GameDTO gameDTO = new GameDTO();
 
         gameDTO.setId(game.getId());
@@ -28,7 +28,7 @@ public class GameMapper {
 
     }
 
-    public Game map(GameDTO gameDTO){
+    public static Game map(GameDTO gameDTO){
         Game game = new Game();
 
         game.setId(gameDTO.getId());
