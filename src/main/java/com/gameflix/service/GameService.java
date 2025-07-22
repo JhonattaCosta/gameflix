@@ -1,5 +1,9 @@
 package com.gameflix.service;
 
+import com.gameflix.dto.CategoryDTO;
+import com.gameflix.dto.GameDTO;
+import com.gameflix.mapper.CategoryMapper;
+import com.gameflix.mapper.GameMapper;
 import com.gameflix.model.Category;
 import com.gameflix.model.Game;
 import com.gameflix.repository.GameRepostiory;
@@ -9,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,43 +21,55 @@ public class GameService {
 
     private final GameRepostiory repostiory;
     private final CategoryService categoryService;
+    private final GameMapper gameMapper;
 
-    public Game saveGame(Game game) {
-        return repostiory.save(game);
+    public GameDTO saveGame(GameDTO gameDTO) {
+        gameDTO.setCategories(this.findCategories(gameDTO.getCategories()));
+        Game gameSaved = gameMapper.map(gameDTO);
+        gameSaved = repostiory.save(gameSaved);
+        return gameMapper.map(gameSaved);
     }
 
-    public List<Game> findAllGames() {
-        return repostiory.findAll();
+    public List<GameDTO> findAllGames() {
+        List<Game> games = repostiory.findAll();
+        return games.stream()
+                .map(GameMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Game> findGameById(Long id) {
-        return repostiory.findById(id);
+    public Optional<GameDTO> findGameById(Long id) {
+        Optional<Game> gameById = repostiory.findById(id);
+        return  gameById.map(GameMapper::map);
     }
 
-    public List<Category> findCategories(List<Category> categories) {
-        List<Category> categoriesFound = new ArrayList<>();
+    public List<CategoryDTO> findCategories(List<CategoryDTO> categories) {
+        List<CategoryDTO> categoriesFound = new ArrayList<>();
         categories.forEach(category ->
                 categoryService.findCategoryById(category.getId()).ifPresent(categoriesFound::add)
         );
         return categoriesFound;
     }
 
-    public Optional<Game> updateGame(Long gameId, Game updateGame) {
+    public Optional<GameDTO> updateGame(Long gameId, GameDTO updateGameDTO) {
         Optional<Game> optGame = repostiory.findById(gameId);
         if (optGame.isPresent()) {
-            List<Category> categories = this.findCategories(updateGame.getCategories());
-
             Game game = optGame.get();
-            game.setName(updateGame.getName());
-            game.setDescription(updateGame.getDescription());
-            game.setRating(updateGame.getRating());
-            game.setDateRelease(updateGame.getDateRelease());
+            game.setName(updateGameDTO.getName());
+            game.setDescription(updateGameDTO.getDescription());
+            game.setRating(updateGameDTO.getRating());
+            game.setDateRelease(updateGameDTO.getDateRelease());
 
+            List<Category> categories = updateGameDTO.getCategories()
+                            .stream()
+                            .map(CategoryMapper::map)
+                            .collect(Collectors.toList());
             game.getCategories().clear();
             game.getCategories().addAll(categories);
 
-            repostiory.save(game);
-            return Optional.of(game);
+            Game updatedGame = repostiory.save(game);
+
+            GameDTO updatedGameDTO = GameMapper.map(updatedGame);
+            return Optional.of(updatedGameDTO);
         }
         return Optional.empty();
     }
