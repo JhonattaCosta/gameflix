@@ -6,6 +6,7 @@ import com.gameflix.mapper.CategoryMapper;
 import com.gameflix.mapper.GameMapper;
 import com.gameflix.model.Category;
 import com.gameflix.model.Game;
+import com.gameflix.repository.CategoryRepository;
 import com.gameflix.repository.GameRepostiory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class GameService {
     private final GameRepostiory repostiory;
     private final CategoryService categoryService;
     private final GameMapper gameMapper;
+    private final CategoryRepository categoryRepository;
 
     public GameDTO saveGame(GameDTO gameDTO) {
         gameDTO.setCategories(this.findCategories(gameDTO.getCategories()));
@@ -74,8 +76,11 @@ public class GameService {
         return Optional.empty();
     }
 
-    public List<Game> findByCategory(Long categoryId) {
-        return repostiory.findByCategoriesIn(List.of(Category.builder().id(categoryId).build()));
+    public List<GameDTO> findByCategory(Long categoryId) {
+        List<Game> games = repostiory.findByCategoryId(categoryId);
+        return games.stream()
+                .map(GameMapper::map)
+                .collect(Collectors.toList());
     }
 
     public void deleteById(Long id) {
